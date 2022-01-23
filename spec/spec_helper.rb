@@ -64,14 +64,7 @@ RSpec.configure do |config|
   # to setup a test will be unavailable to the browser, which runs under a separate server instance.
   config.use_transactional_fixtures = false
 
-  # Ensure Suite is set to use transactions for speed.
   config.before :suite do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with :truncation
-  end
-
-  # Before each spec check if it is a Javascript test and switch between using database transactions or not where necessary.
-  config.before(:each, :js) do
     DatabaseCleaner.strategy = :truncation
   end
 
@@ -87,8 +80,8 @@ RSpec.configure do |config|
   config.fail_fast = ENV['FAIL_FAST'] || false
 
   config.include Spree::TestingSupport::ControllerRequests, :type => :controller
-  config.include Devise::TestHelpers, :type => :controller
-  
+  config.include Devise::Test::ControllerHelpers, :type => :controller
+
   config.include Capybara::DSL, :type => :request
 
   config.filter_run :focus => true

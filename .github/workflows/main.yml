@@ -1,0 +1,49 @@
+name: Build and test
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:11
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 15
+
+    env:
+      PGHOST: 127.0.0.1
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      RAILS_ENV: test
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Read .nvmrc
+        run: echo "##[set-output name=NVMRC;]$(cat .nvmrc)"
+        id: nvm
+      - name: Use Node.js ${{ steps.nvm.outputs.NVMRC }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ steps.nvm.outputs.NVMRC }}
+      - name: Install PostgreSQL client library libpq-dev
+        run: |
+          sudo apt-get -yqq install libpq-dev
+      - name: Setup ruby and bundle install
+        uses: ruby/setup-ruby@v1
+        with: # Gets version from .ruby-version
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Create dummy app for tests
+        run: |
+          bundle exec rake test_app
+      - name: Test with Rspec
+        run: |
+          bundle exec rspec

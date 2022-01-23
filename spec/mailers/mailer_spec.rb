@@ -21,11 +21,12 @@ describe Spree::OrderMailer, type: :mailer do
           name: @store_names[tenant_index],
           mail_from_address: @store_mail_from_addresses[tenant_index]
         )
-        # Set per-tenant preference for logo
-        Spree::Preference.create!({
-          key: 'spree/app_configuration/logo',
-          value: @tenant_logo_urls[tenant_index],
-        })
+        ['logo', 'mailer_logo'].each do |preference_name|
+          Spree::Preference.create!({
+            key: "spree/app_configuration/#{preference_name}",
+            value: @tenant_logo_urls[tenant_index],
+          })
+        end
         # Create order, shipment, and reimbursement
         @orders[tenant_index] = FactoryBot.create(:order)
         @shipments[tenant_index] = FactoryBot.create(:shipment)
@@ -37,6 +38,16 @@ describe Spree::OrderMailer, type: :mailer do
   it 'uses the correct tenant for the order confirm email' do
     @tenants.each_with_index do |tenant, tenant_index|
       message = Spree::OrderMailer.confirm_email(@orders[tenant_index].id)
+      expect(message.from).to eq([@store_mail_from_addresses[tenant_index]])
+      expect(message.subject).to include(@store_names[tenant_index])
+      expect(message.html_part.body.decoded).to include(@store_names[tenant_index])
+      expect(message.html_part.body.decoded).to include(@tenant_logo_urls[tenant_index])
+    end
+  end
+
+  it 'uses the correct tenant for the order store owner notification email' do
+    @tenants.each_with_index do |tenant, tenant_index|
+      message = Spree::OrderMailer.store_owner_notification_email(@orders[tenant_index].id)
       expect(message.from).to eq([@store_mail_from_addresses[tenant_index]])
       expect(message.subject).to include(@store_names[tenant_index])
       expect(message.html_part.body.decoded).to include(@store_names[tenant_index])

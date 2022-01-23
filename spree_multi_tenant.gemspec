@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version     = '0.4.1'
   s.summary     = 'Adds multi-tenant support to Spree'
   s.description = 'Allows completely separate Spree sites to be run from the same installation'
-  s.required_ruby_version     = '>= 2.2.7'
+  s.required_ruby_version     = '>= 2.7.5'
 
    s.author    = 'Stefan Senk'
   # s.email     = 'you@example.com'
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  spree_version = '>= 3.2.0', '< 5.0'
+  spree_version = '>= 4.3.1', '< 5.0'
   s.add_dependency 'spree_core', spree_version
   s.add_dependency 'multitenant'
 
