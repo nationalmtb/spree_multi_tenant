@@ -5,16 +5,22 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'spree_core', github: 'spree/spree', branch: 'master'
-gem 'spree_backend', github: 'spree/spree', branch: 'master'
-gem 'spree_frontend', github: 'spree/spree', branch: 'master'
+gem 'spree_core', '4.3.1'
+gem 'spree_backend', '4.3.1'
+gem 'spree_frontend', '4.3.1'
+gem 'spree_emails', '4.3.1'
 # Provides basic authentication functionality for testing parts of your engine
-gem 'spree_auth_devise', github: 'spree/spree_auth_devise', branch: 'master'
+gem 'spree_auth_devise', '4.4.2'
 gem 'rails-controller-testing'
 
 gem 'sqlite3', '~> 1.4'
 
 gem 'rubocop', require: false
 gem 'rubocop-rspec', require: false
+
+group :test do
+  gem 'pg'
+  gem 'redis', '4.4.0'
+end
 
 gemspec

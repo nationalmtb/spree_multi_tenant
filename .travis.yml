@@ -1,9 +1,0 @@
-language: ruby
-rvm:
-  - 2.5.3
-services:
-  - xvfb
-before_script:
-  - "export DISPLAY=:99.0"
-  - 'bundle exec rake test_app'
-script: 'bundle exec rspec spec'

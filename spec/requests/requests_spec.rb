@@ -8,8 +8,6 @@ def login(user, tenant=user.tenant)
 end
 
 describe "with multiple tenants", type: :request do
-  xit "skip until capybara tests are fixed on TravisCI (they succeed locally)" do
-
   before(:each) do
     @tenant1 = FactoryBot.create(:tenant)
     @tenant2 = FactoryBot.create(:tenant)
@@ -73,6 +71,10 @@ describe "with multiple tenants", type: :request do
     before do
       Multitenant.with_tenant @tenant1 do
         @user = FactoryBot.create(:admin_user)
+        FactoryBot.create(:product) # Required for proper setup
+      end
+      Multitenant.with_tenant @tenant2 do
+        FactoryBot.create(:product) # Required for proper setup
       end
     end
 
@@ -132,9 +134,10 @@ describe "with multiple tenants", type: :request do
     end
 
     it "#show should not display a different tenant's order" do
-      lambda {
-        visit "http://#{@tenant1.domain}/admin/orders/#{@order2.number}/edit"
-      }.should raise_exception(ActiveRecord::RecordNotFound)
+      visit "http://#{@tenant1.domain}/admin/orders/#{@order2.number}/edit"
+      # Spree older versions would raise ActiveRecord::RecordNotFound
+      page.should have_content('Order is not found')
+      page.should_not have_content(@order2.number)
     end
   end
 
@@ -156,7 +159,5 @@ describe "with multiple tenants", type: :request do
       page.should_not have_content("MyPromo2")
     end
   end
-
-  end # skip "is skipped" do
 end
 

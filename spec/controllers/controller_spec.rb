@@ -19,8 +19,7 @@ describe "with multiple tenants", type: :controller do
       end
     end
 
-    # TODO Enable this test again.  It succeeds locally but fails on TravisCI.
-    xit "#index should display products for the tenant" do
+    it "#index should display products for the tenant" do
       get :index, params: {}
       assigns(:products).should == [@product1]
     end

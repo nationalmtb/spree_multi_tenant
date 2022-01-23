@@ -109,6 +109,11 @@ module SpreeMultiTenant
       Spree::PromotionRuleUser,
     ] +
     [
+      'Spree::CmsPage',
+      'Spree::CmsSection',
+      'Spree::Menu',
+      'Spree::MenuItem',
+      'Spree::StoreProduct',
       'Spree::User',
       'Spree::Tag'
     ].map(&:safe_constantize).compact
@@ -121,6 +126,8 @@ module SpreeMultiTenant
       Spree::Api::V2::BaseController
     ] +
     [
+      'Spree::Admin::BaseController',
+      'Spree::StoreController',
       'Spree::UserPasswordsController',
       'Spree::UserSessionsController',
       'Spree::UserRegistrationsController',

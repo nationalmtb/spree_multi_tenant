@@ -1,7 +1,7 @@
 SpreeMultiTenant
 ================
 
-[![Build Status](https://travis-ci.org/stefansenk/spree_multi_tenant.png?branch=master)](https://travis-ci.org/stefansenk/spree_multi_tenant)
+![tests](https://github.com/nationalmtb/spree_multi_tenant/actions/workflows/main.yml/badge.svg)
 
 Adds multi-tenant support to Spree. Allows completely separate Spree sites with separate admins to be run from the same installation.
 
