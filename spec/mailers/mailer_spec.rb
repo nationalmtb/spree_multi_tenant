@@ -9,7 +9,6 @@ describe Spree::OrderMailer, type: :mailer do
     @tenants = FactoryBot.create_list(:tenant, 2)
     @store_names = @tenants.map{ |tenant| "Store For Tenant #{tenant.id}" }
     @store_mail_from_addresses = @tenants.map{ |tenant| "spree_tenant_#{tenant.id}@example.org" }
-    @tenant_logo_urls = @tenants.map{ |tenant| "http://nonexistentdomain.org/logo_tenant_#{tenant.id}.png" }
     @stores = []
     @orders = []
     @shipments = []
@@ -21,12 +20,6 @@ describe Spree::OrderMailer, type: :mailer do
           name: @store_names[tenant_index],
           mail_from_address: @store_mail_from_addresses[tenant_index]
         )
-        ['logo', 'mailer_logo'].each do |preference_name|
-          Spree::Preference.create!({
-            key: "spree/app_configuration/#{preference_name}",
-            value: @tenant_logo_urls[tenant_index],
-          })
-        end
         # Create order, shipment, and reimbursement
         @orders[tenant_index] = FactoryBot.create(:order)
         @shipments[tenant_index] = FactoryBot.create(:shipment)
@@ -41,7 +34,6 @@ describe Spree::OrderMailer, type: :mailer do
       expect(message.from).to eq([@store_mail_from_addresses[tenant_index]])
       expect(message.subject).to include(@store_names[tenant_index])
       expect(message.html_part.body.decoded).to include(@store_names[tenant_index])
-      expect(message.html_part.body.decoded).to include(@tenant_logo_urls[tenant_index])
     end
   end
 
@@ -51,7 +43,6 @@ describe Spree::OrderMailer, type: :mailer do
       expect(message.from).to eq([@store_mail_from_addresses[tenant_index]])
       expect(message.subject).to include(@store_names[tenant_index])
       expect(message.html_part.body.decoded).to include(@store_names[tenant_index])
-      expect(message.html_part.body.decoded).to include(@tenant_logo_urls[tenant_index])
     end
   end
 
@@ -61,7 +52,6 @@ describe Spree::OrderMailer, type: :mailer do
       expect(message.from).to eq([@store_mail_from_addresses[tenant_index]])
       expect(message.subject).to include(@store_names[tenant_index])
       expect(message.html_part.body.decoded).to include(@store_names[tenant_index])
-      expect(message.html_part.body.decoded).to include(@tenant_logo_urls[tenant_index])
     end
   end
 
@@ -71,7 +61,6 @@ describe Spree::OrderMailer, type: :mailer do
       expect(message.from).to eq([@store_mail_from_addresses[tenant_index]])
       expect(message.subject).to include(@store_names[tenant_index])
       expect(message.html_part.body.decoded).to include(@store_names[tenant_index])
-      expect(message.html_part.body.decoded).to include(@tenant_logo_urls[tenant_index])
     end
   end
 
@@ -81,7 +70,6 @@ describe Spree::OrderMailer, type: :mailer do
       expect(message.from).to eq([@store_mail_from_addresses[tenant_index]])
       expect(message.subject).to include(@store_names[tenant_index])
       expect(message.html_part.body.decoded).to include(@store_names[tenant_index])
-      expect(message.html_part.body.decoded).to include(@tenant_logo_urls[tenant_index])
     end
   end
 end
