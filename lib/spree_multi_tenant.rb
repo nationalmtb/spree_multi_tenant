@@ -111,22 +111,29 @@ module SpreeMultiTenant
     [
       'Spree::CmsPage',
       'Spree::CmsSection',
+      'Spree::Digital',
+      'Spree::DigitalLink',
       'Spree::Menu',
       'Spree::MenuItem',
+      'Spree::PaymentSource',
       'Spree::StoreProduct',
+      'Spree::Tag',
       'Spree::User',
-      'Spree::Tag'
+      'Spree::Webhooks::Event',
+      'Spree::Webhooks::Subscriber',
+      'Spree::WishedItem',
+      'Spree::Wishlist'
     ].map(&:safe_constantize).compact
   end
 
   def self.tenanted_controllers
     [
       Spree::BaseController,
-      Spree::Api::BaseController,
       Spree::Api::V2::BaseController
     ] +
     [
       'Spree::Admin::BaseController',
+      'Spree::Api::BaseController',
       'Spree::StoreController',
       'Spree::UserPasswordsController',
       'Spree::UserSessionsController',

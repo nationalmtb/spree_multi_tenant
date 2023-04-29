@@ -29,19 +29,19 @@ describe Spree::Api::Config do
     @tenant2 = FactoryBot.create(:tenant)
 
     SpreeMultiTenant.with_tenant @tenant1 do
-      Spree::Api::Config[:requires_authentication] = true
+      Spree::Api::Config[:api_v2_per_page_limit] = 1
     end
     SpreeMultiTenant.with_tenant @tenant2 do
-      Spree::Api::Config[:requires_authentication] = false
+      Spree::Api::Config[:api_v2_per_page_limit] = 2
     end
   end
 
   it "should have the right preference for the tenant" do
     SpreeMultiTenant.with_tenant @tenant1 do
-      Spree::Api::Config.requires_authentication.should == true
+      Spree::Api::Config.api_v2_per_page_limit.should == 1
     end
     SpreeMultiTenant.with_tenant @tenant2 do
-      Spree::Api::Config.requires_authentication.should == false
+      Spree::Api::Config.api_v2_per_page_limit.should == 2
     end
   end
 end
