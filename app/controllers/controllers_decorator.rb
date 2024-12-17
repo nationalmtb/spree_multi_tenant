@@ -8,6 +8,7 @@ end
 
 module SpreeMultiTenant
   def self.init_preferences
+    Spree::Api::Config.send(:initialize)
     Spree::Preference.all.each do |preference|
       Spree::Preferences::Store.instance.set_without_persist(preference.key, preference.value)
     end

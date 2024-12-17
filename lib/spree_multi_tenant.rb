@@ -111,6 +111,7 @@ module SpreeMultiTenant
     [
       'Spree::CmsPage',
       'Spree::CmsSection',
+      'Spree::DataFeed',
       'Spree::Digital',
       'Spree::DigitalLink',
       'Spree::Menu',
@@ -150,4 +151,3 @@ module SpreeMultiTenant
   end
 
 end
-

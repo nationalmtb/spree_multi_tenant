@@ -10,21 +10,18 @@ end
 describe "with multiple tenants", type: :request do
   before(:each) do
     @tenant1 = FactoryBot.create(:tenant)
+    Multitenant.with_tenant @tenant1 do
+      FactoryBot.create(:store, default_country: FactoryBot.create(:country))
+      Spree::Store.default.update(seo_title: 'Site1Title')
+    end
     @tenant2 = FactoryBot.create(:tenant)
+    Multitenant.with_tenant @tenant2 do
+      FactoryBot.create(:store, default_country: FactoryBot.create(:country))
+      Spree::Store.default.update(seo_title: 'Site2Title')
+    end
   end
 
   context "visiting the homepage page" do
-    before do
-      Multitenant.with_tenant @tenant1 do
-        FactoryBot.create(:store)
-        Spree::Store.default.update(seo_title: 'Site1Title')
-      end
-      Multitenant.with_tenant @tenant2 do
-        FactoryBot.create(:store)
-        Spree::Store.default.update(seo_title: 'Site2Title')
-      end
-    end
-
     it "homepage should display the page title for the tenant" do
       visit "http://#{@tenant1.domain}"
       page.title.should include("Site1Title")
@@ -61,9 +58,10 @@ describe "with multiple tenants", type: :request do
     end
 
     it "#show should not display a different tenant's product" do
-      expect{
-        visit "http://#{@tenant1.domain}/products/#{@product2.slug}"
-      }.to raise_error(ActiveRecord::RecordNotFound)
+      visit "http://#{@tenant1.domain}/products/#{@product2.slug}"
+      expect(page.status_code).to eq(404)
+      page.should_not have_content(@product1.name)
+      page.should_not have_content(@product2.name)
     end
   end
 

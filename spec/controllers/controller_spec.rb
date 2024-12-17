@@ -3,7 +3,13 @@ require 'spec_helper'
 describe "with multiple tenants", type: :controller do
   before(:each) do
     @tenant1 = FactoryBot.create(:tenant)
+    Multitenant.with_tenant @tenant1 do
+      FactoryBot.create(:store, default_country: FactoryBot.create(:country))
+    end
     @tenant2 = FactoryBot.create(:tenant)
+    Multitenant.with_tenant @tenant2 do
+      FactoryBot.create(:store, default_country: FactoryBot.create(:country))
+    end
 
     @request.host = @tenant1.domain
   end
